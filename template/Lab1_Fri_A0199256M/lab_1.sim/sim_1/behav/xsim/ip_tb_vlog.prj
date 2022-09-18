@@ -1,0 +1,14 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../lab_1.srcs/sources_1/imports/template/Clock_Enable.v" \
+"../../../../lab_1.srcs/sources_1/imports/template/Get_MEM.v" \
+"../../../../lab_1.srcs/sources_1/imports/template/Seven_Seg_Nexys.v" \
+"../../../../lab_1.srcs/sources_1/imports/template/Top_Nexys.v" \
+"../../../../lab_1.srcs/sources_1/imports/template/basic_sync.v" \
+"../../../../lab_1.srcs/sim_1/new/ip_tb.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort
