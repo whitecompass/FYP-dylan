@@ -7,7 +7,7 @@ module Wrapper(
   input clk,
   output [15:0] led,
   output dp,
-  output [7:0] anode,
+  output [7:0] anode, // anode for basys only has 4 to use
   output [6:0] cathode
 );
 
@@ -30,7 +30,7 @@ vio_inst (
   .probe_out5(SW)
 );
 
-Top 
+top
 top_inst (
   .clk(clk),
 

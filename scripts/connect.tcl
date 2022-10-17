@@ -1,7 +1,7 @@
-set output_dir {path_to_project}; # Filled by JS form
+# set output_dir {path_to_project}; # Filled by JS form
 
 # Create VIO IP
-
+./ip/vio.tcl
 
 # Add Wrapper.v to sources
 import_files ./rtl/Wrapper.v
@@ -12,6 +12,8 @@ update_compile_order -fileset sources_1
 update_compile_order -fileset sim_1
 
 # Disable input constraints
+set_property is_enabled false [get_files *.xdc]
+update_compile_order -fileset constrs_1
 
 # Generate bitstream
 launch_runs synth_1
