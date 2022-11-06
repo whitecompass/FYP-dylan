@@ -1,11 +1,12 @@
-## vivado -mode batch -source init.tcl <file.xpr>
-## <file.xpr> is provided by frontend
+## vivado -mode batch -source init.tcl
+
+open_project [glob "./*.xpr"]
 
 # Create VIO IP
-./ip/vio.tcl
+source ./scripts/ip/vio.tcl
 
 # Add Wrapper.v to sources
-import_files ./rtl/Wrapper.v
+import_files ./scripts/rtl/Wrapper.v
 
 # Set Wrapper.v as top file
 set_property top Wrapper [current_fileset]
@@ -16,7 +17,7 @@ update_compile_order -fileset sim_1
 set_property is_enabled false [get_files *.xdc]
 
 # Add clock constraints
-import_files -fileset constrs_1 ./xdc/init.xdc
+import_files -fileset constrs_1 ./scripts/xdc/init.xdc
 update_compile_order -fileset constrs_1
 
 # Generate bitstream
