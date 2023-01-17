@@ -10,11 +10,17 @@ const Login = () => {
     const avatarStyle = { backgroundColor: '#1bbd7e' }
     const btnstyle = { margin: '8px 0' }
 
+    const errors = {
+        username: "Incorrect username",
+        password: "Incorrect password"
+    }
     const [errorMessages, setErrorMessags] = useState({})
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleSubmit = (event) => {
-        event.preventDefault()  
+        event.preventDefault()
+
+        // var { username, password } = document.forms[0]
     };
 
 
@@ -36,7 +42,7 @@ const Login = () => {
                     }
                     label="Remember me"
                 />
-                <Button type='submit' color='primary' variant="contained" style={btnstyle} fullWidth>Sign in</Button>
+                <Button type='submit' color='primary' variant="contained" style={btnstyle} fullWidth onClick={handleSubmit}>Sign in</Button>
                 <Typography >
                     <Link href="#" >
                         Forgot password?
