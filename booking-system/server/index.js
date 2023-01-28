@@ -1,22 +1,40 @@
-const express = require('express')
-const mysql = require('mysql')
+const express = require('express');
+const cors = require('cors')
+const mysql = require('mysql');
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: '',
-    password: '',
-    database: ''
-})
+const allowedOrigins = ['http://localhost:3000']
 
-connection.connect()
+// const connection = mysql.createConnection({
+//     host: 'localhost',
+//     user: '',
+//     password: '',
+//     database: ''
+// })
 
-connection.query()
+// connection.connect()
 
-const app = express()
+// connection.query()
 
-app.get("/api", (req, res) => {
-    res.json({ "events":
-               ["user1", "user2", "user3"] })
-})
+const app = express();
 
-app.listen(5000, () => console.log("Server started on port 5000"))
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            var msg = 'The CORS policy for this site does not allow access fro the specified origin'
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
+}));
+
+app.get("/login", (req, res) => {
+    res.json({})
+});
+
+app.get("/calendar_data", (req, res) => {
+    const events = require('./tmp_calendar_data.js');
+    res.json(events)
+});
+
+app.listen(5000, () => console.log("Server started on port 5000"));
