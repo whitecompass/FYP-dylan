@@ -5,24 +5,24 @@ const EVENTS = [
     start: new Date(new Date(new Date().setHours(9)).setMinutes(0)),
     end: new Date(new Date(new Date().setHours(10)).setMinutes(0)),
     disabled: true,
-    admin_id: [1, 2, 3, 4]
+    grp_id: 1,
+    color: "#17A2B8"
   },
   {
     event_id: 2,
     title: "Event 2",
     start: new Date(new Date(new Date().setHours(10)).setMinutes(0)),
     end: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
-    admin_id: 2,
-    color: "#50b500"
+    grp_id: 1,
+    color: "#17A2B8"
   },
   {
     event_id: 3,
     title: "Event 3",
     start: new Date(new Date(new Date().setHours(11)).setMinutes(0)),
     end: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
-    admin_id: 1,
-    editable: false,
-    deletable: false
+    grp_id: 2,
+    color: "#28A745"
   },
   {
     event_id: 4,
@@ -37,8 +37,8 @@ const EVENTS = [
         new Date().getDate() - 2
       )
     ),
-    admin_id: 2,
-    color: "#900000"
+    grp_id: 0,
+    color: "#FF5733",
   },
   {
     event_id: 5,
@@ -53,8 +53,8 @@ const EVENTS = [
         new Date().getDate() - 2
       )
     ),
-    admin_id: 2,
-    editable: true
+    grp_id: 3,
+    color: "#28A745"
   },
   {
     event_id: 6,
@@ -65,7 +65,8 @@ const EVENTS = [
       )
     ),
     end: new Date(new Date(new Date().setHours(14)).setMinutes(0)),
-    admin_id: 2
+    grp_id: 3,
+    color: "#28A745"
   }
 ];
 
