@@ -7,18 +7,6 @@ const mysql = require('mysql');
 const allowedOrigins = ['http://localhost:3000']
 const TIME_LIMIT = 2 // in hours
 
-// const db = mysql.createConnection({
-//     host: 'localhost',
-//     user: '',
-//     password: '',
-//     database: ''
-// })
-
-// db.connect()
-
-// db.query()
-
-
 // TODO
 const bookingTimeCheck = async (req, res) => {
     const event = req.body
@@ -46,6 +34,55 @@ const bookingTimeCheck = async (req, res) => {
     return res.status(200).json({ message: "Booking succesful" });
 };
 
+// const db = mysql.createConnection({
+//     host: 'localhost',
+//     user: '',
+//     password: '',
+//     database: ''
+// })
+
+// db.connect()
+
+// db.query()
+
+router.post("/register", (req, res) => {
+    const { username, password } = req.body;
+    const saltRounds = 10;
+
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) throw err;
+    const sql = ``; // TODO: add query
+
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.send('User registered successfully');
+    });
+  });
+});
+
+router.post("/login", (req, res) => {
+    const { username, password } = req.body;
+    const sql = ``; // TODO: search query
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+
+        if (result.length === 0) return res.status(400).send("Username not found");
+
+        const user = result[0];
+        bcrypt.compare(password, user.passwrod, (err, result) => {
+            if (err) throw err;
+            if (!result) return res.status(400).send("Incorrect password");
+            const token = jwt.sign({ id: user.id }, "secretkey", { expiresIn: "1h" });
+            res.send({ token });
+        })
+    })
+
+});
+
+router.post("/calendar_data", (req, res) => {
+    return bookingTimeCheck(req, res)
+});
+
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true);
@@ -56,11 +93,6 @@ app.use(cors({
         return callback(null, true);
     }
 }));
-
-app.get("/login", (req, res) => {
-    // TODO
-    res.json({})
-});
 
 app.get("/calendar_data", (req, res) => {
     // TODO
@@ -73,10 +105,6 @@ app.put("/calendar_data/:id", (req, res) => {
 });
 
 app.listen(5000, () => console.log("Server started on port 5000"));
-
-router.post("/calendar_data", (req, res) => {
-    return bookingTimeCheck(req, res)
-});
 
 
 module.exports = router;
