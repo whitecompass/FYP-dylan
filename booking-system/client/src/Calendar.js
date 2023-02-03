@@ -1,5 +1,6 @@
 import { React, useState } from 'react';
 import { parseISO } from 'date-fns';
+import axios from 'axios';
 import { Scheduler } from '@aldabil/react-scheduler';
 
 import DialogPopup from './DialogPopup'
@@ -13,26 +14,16 @@ const Calendar = () => {
     const [dialogMessage, setDialogMessage] = useState("");
     const [dialogTitle, setDialogTitle] = useState("");
 
-    const handleDialogOpen = () => {
-        setDialogOpen(true)
-    }
-
     const handleDialogClose = () => {
-        setDialogOpen(false)
-    }
-
-    const handleMessage = (my_message) => {
-        setDialogMessage(my_message)
-    }
-
-    const handleTitle = (my_title) => {
-        setDialogTitle(my_title)
+        setDialogTitle("");
+        setDialogMessage("");
+        setDialogOpen(false);
     }
 
     const fetchRemote = async () => {
         try {
-            const res = await fetch(`${BACKEND_URL}/calendar_data`);
-            const events = await res.json();
+            const res = await axios.get(`${BACKEND_URL}/calendar_data`);
+            const events = res.data;
             console.log("Events", events);
 
             const parsedEvents = events.map(event => {
@@ -47,7 +38,6 @@ const Calendar = () => {
         } catch (err) {
             console.log('Error:', err);
         }
-
     }
     
     const handleConfirm = async (event, action) => {
@@ -56,25 +46,25 @@ const Calendar = () => {
             let method;
             let event_color;
 
-            const user_group = localStorage.getItem("group")
-            const user_role = localStorage.getItem("role")
+            const userGroup = localStorage.getItem("userGroup")
+            const userRole = localStorage.getItem("userRole")
 
             if (action === "edit") {
                 // Check if user has edit permissions
-                if (user_group === event.grp_id ||
-                    user_role === "admin") {
+                if (userGroup === event.grp_id ||
+                    userRole === "admin") {
                     url = `${BACKEND_URL}/calendar_data/${event.event_id}`;
                     method = "PUT";
                 } else {
-                    handleDialogOpen()
-                    handleTitle("You do not have the relevant permissions")
-                    handleMessage("Not from the correct group/Not an admin")
+                    setDialogOpen()
+                    setDialogTitle("You do not have the relevant permissions")
+                    setDialogMessage("Not from the correct group/Not an admin")
                     return null;
                 }
             } else if (action === "create") {
                 url = `${BACKEND_URL}/calendar_data/`;
                 method = "POST";
-                event_color = GROUP_COLORS[user_group]
+                event_color = GROUP_COLORS[userGroup]
             } else {
                 return null;
             }
@@ -86,13 +76,14 @@ const Calendar = () => {
                 }
             }
             let body = JSON.stringify(event);
-            const res = await fetch(url, {
+            const res = await axios({
                 method,
+                url,
                 headers: { "Content-Type": "application/json" },
-                body
+                data: body
             });
-            const data = await res.json();
-            return data;
+
+            return res.data;
         } catch (err) {
             console.error("Error:", err);
         }
@@ -100,10 +91,8 @@ const Calendar = () => {
 
     const handleDelete = async (deletedId) => {
         try {
-            const res = await fetch(`${BACKEND_URL}/calendar_data/${deletedId}`, {
-                method: "DELETE"
-            });
-            return await res.json();
+            const res = await axios.delete(`${BACKEND_URL}/calendar_data/${deletedId}`);
+            return res.data;
         } catch (err) {
             console.error("Error:", err)
         }

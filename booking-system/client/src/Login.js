@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import { Grid, Paper, Avatar, TextField, Button, Link } from '@mui/material'
+import { useNavigate } from "react-router-dom";
+import { Grid, Paper, Avatar, TextField, Button } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { FormControlLabel, RadioGroup, Radio} from '@mui/material';
 
-import Homepage from './Homepage';
 import DialogPopup from './DialogPopup';
 
 const BACKEND_URL = 'http://localhost:5000';
@@ -13,6 +13,8 @@ const Login = () => {
     const paperStyle = { padding: 20, height: '70vh', width: 280, margin: "20px auto" };
     const avatarStyle = { backgroundColor: '#1bbd7e' };
     const btnstyle = { margin: '8px 0' };
+
+    let navigate = useNavigate();
     
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogMessage, setDialogMessage] = useState("");
@@ -56,8 +58,10 @@ const Login = () => {
             // setDialogTitle("Incorrect credentials");
             // setDialogMessage("Incorrect user ID or password. Type the correct user ID and password, and try again.");
         }
-        //test
+
+        // TEST CODE: TO BE REMOVED
         setIsAuthenticated(true);
+        return navigate("/home");
     }
 
     const onLogout = () => {
@@ -68,83 +72,81 @@ const Login = () => {
     return (
         <div>
             <Grid>
-                {   
-                    isAuthenticated ? (
-                        <Homepage />
-                    ):(
-                        <Paper elevation={10} style={paperStyle} >
-                            <Grid align='center'>
-                                <Avatar style={avatarStyle}><LockOutlinedIcon /></Avatar>
-                                <h2>Sign In</h2>
+                <Paper elevation={10} style={paperStyle} >
+                    <Grid align='center'>
+                        <Avatar style={avatarStyle}><LockOutlinedIcon /></Avatar>
+                        <h2>Sign In</h2>
+                    </Grid>
+
+                    <form onSubmit={onLogin}>
+                    <Grid 
+                        container 
+                        direction="column"
+                        justify="center"
+                        alignItems="stretch"
+                        spacing={2}
+                    >
+
+                        <Grid item>
+                            <TextField 
+                                name='username'
+                                value={username} 
+                                label='Username' 
+                                placeholder='Enter username' 
+                                variant="outlined" 
+                                onChange={(e) => setUsername(e.target.value)} 
+                                fullWidth 
+                                required 
+                            />
                             </Grid>
-                            <form onSubmit={onLogin}>
-                                <Grid 
-                                    container 
-                                    direction="column"
-                                    justify="center"
-                                    alignItems="stretch"
-                                    spacing={2}
+
+                            <Grid item>
+                                <TextField 
+                                    name='password'
+                                    value={password} 
+                                    label='Password' 
+                                    placeholder='Enter password' 
+                                    type='password' 
+                                    variant="outlined"
+                                    onChange={(e) => setPassword(e.target.value)} 
+                                    fullWidth 
+                                    required 
+                                />
+                            </Grid>
+
+                            <Grid item>
+                                <RadioGroup
+                                    name="userGroup"
+                                    value={userRole}
+                                    onChange={(e)=>{ setUserRole(e.currentTarget.value)}}>    
+                                    <FormControlLabel value="Student" control={<Radio />} label="Student" />
+                                    <FormControlLabel value="Lecturer" control={<Radio />} label="Lecturer" />
+                                    <FormControlLabel value="Admin" control={<Radio />} label="Admin" />
+                                </RadioGroup>
+                            </Grid>
+
+                            <Grid item>
+                                <Button 
+                                    type='submit' 
+                                    color='primary' 
+                                    variant="contained" 
+                                    style={btnstyle} 
+                                    fullWidth 
                                 >
-                                    <Grid item>
-                                        <TextField 
-                                            name='username'
-                                            value={username} 
-                                            label='Username' 
-                                            placeholder='Enter username' 
-                                            variant="outlined" 
-                                            onChange={(e) => setUsername(e.target.value)} 
-                                            fullWidth 
-                                            required 
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField 
-                                            name='password'
-                                            value={password} 
-                                            label='Password' 
-                                            placeholder='Enter password' 
-                                            type='password' 
-                                            variant="outlined"
-                                            onChange={(e) => setPassword(e.target.value)} 
-                                            fullWidth 
-                                            required 
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <RadioGroup
-                                            name="userGroup"
-                                            value={userRole}
-                                            onChange={(e)=>{ setUserRole(e.currentTarget.value)}}
-                                        >    
-                                            <FormControlLabel value="Student" control={<Radio />} label="Student" />
-                                            <FormControlLabel value="Lecturer" control={<Radio />} label="Lecturer" />
-                                            <FormControlLabel value="Admin" control={<Radio />} label="Admin" />
-                                        </RadioGroup>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button 
-                                            type='submit' 
-                                            color='primary' 
-                                            variant="contained" 
-                                            style={btnstyle} 
-                                            fullWidth
-                                        >
-                                            Sign in
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </form>
-                        </Paper>
-                    )
+                                    Sign in
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </Paper>
 
-                }
+            <DialogPopup
+            open={dialogOpen}
+            title={dialogTitle}
+            message={dialogMessage}
+            handleClose={handleDialogClose}
+            />
 
-                <DialogPopup
-                open={dialogOpen}
-                title={dialogTitle}
-                message={dialogMessage}
-                handleClose={handleDialogClose}
-                />
             </Grid>
         </div>
     )
