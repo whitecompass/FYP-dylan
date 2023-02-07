@@ -119,7 +119,7 @@ app.use(cors({
     }
 }));
 
-//TODO
+//no idea if i did it correctly
 app.get("/calendar_data", (req, res) => {
     const data = [];
     const sql = `SELECT (id, Group, Start_time, End_time, Duration) FROM bookings`;
