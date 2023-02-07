@@ -121,12 +121,12 @@ app.use(cors({
 
 //TODO
 app.get("/calendar_data", (req, res) => {
-    const events = require('./tmp_calendar_data.js');
     const sql = `SELECT (Group, Start_time, End_time, Duration) FROM bookings`;
     db.query(sql, (err, result) => {
-      if (err) throw err;
-      res.json(events);
-    }); 
+      if (err) throw err; 
+    });
+    const events = require('./tmp_calendar_data.js');
+    res.json(events);
 });
 
 app.put("/calendar_data/:id", (req, res) => {
