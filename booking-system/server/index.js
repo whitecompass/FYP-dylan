@@ -121,11 +121,18 @@ app.use(cors({
 
 //TODO
 app.get("/calendar_data", (req, res) => {
-    const sql = `SELECT (Group, Start_time, End_time, Duration) FROM bookings`;
+    const data = [];
+    const sql = `SELECT (id, Group, Start_time, End_time, Duration) FROM bookings`;
     db.query(sql, (err, result) => {
-      if (err) throw err; 
+      if (err) throw err;
+      data = result;
     });
     const events = require('./tmp_calendar_data.js');
+    events.event_id = data[0];
+    events.start = data[2];
+    events.end = data[3];
+    events.grp_id = data[1];
+    
     res.json(events);
 });
 
