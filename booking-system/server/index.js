@@ -20,10 +20,10 @@ db.connect(function(err) {
     } else{
       console.log("Successfully connected to database!");
     }
-    //first table has 7 columns: id, name, matricno, group, role, username, password
-    let createTable = `create table if not exists userdata (id int auto_increment, StudentName varchar(255) null, MatricNo varchar(255) null, Group int null, Role varchar(255) null, Username varchar(255) not null, Password varchar(255) not null, PRIMARY KEY (id))`;
-    //second table has 6 columns: id, date, group, starttime, endtime, duration
-    let createTable2 = `create table if not exists bookings (id int auto_increment, Date varchar(255) not null, Group int not null, Start_time varchar(255) not null, End_time varchar(255) null, Duration varchar(255) not null, PRIMARY KEY(id))`;
+    //first table has 8 columns: id, name, module, matricno, group, role, username, password
+    let createTable = `create table if not exists userdata (id int auto_increment, StudentName varchar(255) not null, Module varchar(255) not null, MatricNo varchar(255) not null, Group int not null, Role varchar(255) not null, Username varchar(255) not null, Password varchar(255) not null, PRIMARY KEY (id))`;
+    //second table has 5 columns: id, group, starttime, endtime, duration
+    let createTable2 = `create table if not exists bookings (id int auto_increment, Group int not null, Start_time varchar(255) not null, End_time varchar(255) null, Duration varchar(255) not null, PRIMARY KEY(id))`;
     
     
     db.query(createTable, function(err, results, fields) {
@@ -38,8 +38,6 @@ db.connect(function(err) {
     });
   
 });
-// TODO
-//add Date (of the booking)
 const bookingTimeCheck = async (req, res) => {
     const event = req.body
     const group = event.grp_id;
@@ -67,27 +65,20 @@ const bookingTimeCheck = async (req, res) => {
 };
 
 
-
-// const db = mysql.createConnection({
-//     host: 'localhost',
-//     user: '',
-//     password: '',
-//     database: ''
-// })
-
 // db.connect()
 
 // db.query()
 
+//add the need to include StudentName, Module, MatricNo, Group, Role when registering
 router.post("/register", (req, res) => {
     const { username, password } = req.body;
     const saltRounds = 10;
 
     bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) throw err;
-    const sql = `INSERT INTO userdata (StudentName, MatricNo, Group, Role, Username, Password) VALUES ("${name}", "${matricno}", "${group}", "${role}", "${username}", "${password}")`; // TODO: add query
+    const sql = `INSERT INTO userdata (StudentName, Module, MatricNo, Group, Role, Username, Password) VALUES ("${name}", "${module}" "${matricno}", "${group}", "${role}", "${username}", "${password}")`;
 
-    connection.query(sql, (err, result) => {
+    db.query(sql, (err, result) => {
       if (err) throw err;
       res.send('User registered successfully');
     });
@@ -96,7 +87,7 @@ router.post("/register", (req, res) => {
 
 router.post("/login", (req, res) => {
     const { username, password } = req.body;
-    const sql = `SELECT (Password) FROM userdata WHERE Username = ${username}`; // TODO: search query
+    const sql = `SELECT (Password) FROM userdata WHERE Username = ${username}`;
     db.query(sql, (err, result) => {
         if (err) throw err;
 
@@ -128,10 +119,14 @@ app.use(cors({
     }
 }));
 
+//TODO
 app.get("/calendar_data", (req, res) => {
-    // TODO
     const events = require('./tmp_calendar_data.js');
-    res.json(events)
+    const sql = `SELECT (Group, Start_time, End_time, Duration) FROM bookings`;
+    db.query(sql, (err, result) => {
+      if (err) throw err;
+      res.json(events);
+    }); 
 });
 
 app.put("/calendar_data/:id", (req, res) => {
