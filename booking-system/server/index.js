@@ -120,21 +120,25 @@ app.use(cors({
 }));
 
 app.get("/calendar_data", (req, res) => {
-    const data = [];
     const sql = `SELECT (id, Group, Start_time, End_time, Duration) FROM bookings`;
     db.query(sql, (err, result) => {
       if (err) throw err;
-      data = result; //data[0] = id, data[1] = group, data[2] = start_time, data[3] = end_time, data[4] = duration
+      
+      let data = [];
+      
+      for (let i = 0; i < result.rows.length; i++) {
+          let row = result.rows[i];
+          let jsonRow = {
+              event_id: row.id,
+              start: row.Start_time,
+              end: row.End_time,
+              grp_id: row.Group
+              
+          };
+          data.push(jsonRow);
+      }
+      res.json(data);
     });
-    
-    let formatData = {
-        event_id: data[0],
-        start: data[2],
-        end: data[3],
-        grp_id: data[1]
-    };
-    
-    res.json(formatData);
 });
 
 app.put("/calendar_data/:id", (req, res) => {
