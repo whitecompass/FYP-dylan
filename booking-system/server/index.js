@@ -119,21 +119,22 @@ app.use(cors({
     }
 }));
 
-//no idea if i did it correctly
 app.get("/calendar_data", (req, res) => {
     const data = [];
     const sql = `SELECT (id, Group, Start_time, End_time, Duration) FROM bookings`;
     db.query(sql, (err, result) => {
       if (err) throw err;
-      data = result;
+      data = result; //data[0] = id, data[1] = group, data[2] = start_time, data[3] = end_time, data[4] = duration
     });
-    const events = require('./tmp_calendar_data.js');
-    events.event_id = data[0];
-    events.start = data[2];
-    events.end = data[3];
-    events.grp_id = data[1];
     
-    res.json(events);
+    let formatData = {
+        event_id: data[0],
+        start: data[2],
+        end: data[3],
+        grp_id: data[1]
+    };
+    
+    res.json(formatData);
 });
 
 app.put("/calendar_data/:id", (req, res) => {
