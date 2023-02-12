@@ -119,6 +119,7 @@ app.use(cors({
     }
 }));
 
+//retrieve data from table and send to client
 app.get("/calendar_data", (req, res) => {
     const sql = `SELECT (id, Group, Start_time, End_time, Duration) FROM bookings`;
     db.query(sql, (err, result) => {
