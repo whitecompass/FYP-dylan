@@ -76,7 +76,7 @@ router.post("/register", (req, res) => {
 
     bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) throw err;
-    const sql = `INSERT INTO userdata (StudentName, Module, MatricNo, Group, Role, Username, Password) VALUES ("${name}", "${module}" "${matricno}", "${group}", "${role}", "${username}", "${password}")`;
+    const sql = `INSERT INTO userdata (StudentName, Module, MatricNo, Group, Role, Username, Password) VALUES ("${name}", "${module}", "${matricno}", "${group}", "${role}", "${username}", "${password}")`;
 
     db.query(sql, (err, result) => {
       if (err) throw err;
@@ -119,6 +119,7 @@ app.use(cors({
     }
 }));
 
+//fetch data from table and send to client 
 app.get("/calendar_data", (req, res) => {
     const sql = `SELECT (id, Group, Start_time, End_time, Duration) FROM bookings`;
     db.query(sql, (err, result) => {
