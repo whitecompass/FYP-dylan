@@ -1,17 +1,17 @@
 const fs = require("fs");
 
 const sampleData = [
-  { id: 1, name: 'Karen', group: 2, Start_time: 'karenthia', End_time: 'karenthia01' },
-  { id: 2, name: 'Bernerd', group: 1, Start_time: 'bernerdtan', End_time: 'bernerdtan01' },
-  { id: 3, name: 'Thomas', group: 2, Start_time: 'thomasbong', End_time: 'thomasbong01' },
-  { id: 4, name: 'Ken', group: 2, Start_time: 'kenlim', End_time: 'kenlim01' },
-  { id: 5, name: 'Claudia', group: 3, Start_time: 'claudiawong', End_time: 'claudiawong01' }
+  { id: 1, group: 2, Start_time: '23/03/19 14:00', End_time: '23/03/19 17:00', Duration: '3' },
+  { id: 2, group: 1, Start_time: '24/03/19 13:00', End_time: '24/03/19 15:00', Duration: '2' },
+  { id: 3, group: 2, Start_time: '24/03/19 09:00', End_time: '24/03/19 13:00', Duration: '4' },
+  { id: 4, group: 2, Start_time: '25/03/19 13:00', End_time: '25/03/19 14:00', Duration: '1' },
+  { id: 5, group: 3, Start_time: '26/03/19 12:00', End_time: '26/03/19 13:00', Duration: '1' }
 ];
 
-let csv = 'id,name,module,matricno,role,group,username,password\n';
+let csv = 'id,Group,Start_time,End_time,Duration\n';
 
 data.forEach(function(row) {
-  csv += row.id + ',' + row.name + ',' + row.module + ',' + row.matricno + ',' + row.role + ',' + row.group + ',' + row.username + ',' + row.password + '\n';
+  csv += row.id + ',' + row.Group + ',' + row.Start_time + ',' + row.End_time + ',' + row.Duration + '\n';
 });
 
 fs.writeFileSync('data.csv', csv);
