@@ -21,9 +21,9 @@ db.connect(function(err) {
       console.log("Successfully connected to database!");
     }
     //first table has 8 columns: id, name, module, matricno, group, role, username, password
-    let createTable = `create table if not exists userdata (id int auto_increment, StudentName varchar(255) not null, Module varchar(255) not null, MatricNo varchar(255) not null, Group int not null, Role varchar(255) not null, Username varchar(255) not null, Password varchar(255) not null, PRIMARY KEY (id))`;
+    let createTable = `create table if not exists userdata (id int auto_increment, StudentName varchar(255) not null, Module varchar(255) not null, MatricNo varchar(255) not null, Grp int not null, Role varchar(255) not null, Username varchar(255) not null, Password varchar(255) not null, PRIMARY KEY (id))`;
     //second table has 5 columns: id, group, starttime, endtime, duration
-    let createTable2 = `create table if not exists bookings (id int auto_increment, Group int not null, Start_time varchar(255) not null, End_time varchar(255) null, Duration varchar(255) not null, PRIMARY KEY(id))`;
+    let createTable2 = `create table if not exists bookings (id int auto_increment, Grp int not null, Start_time varchar(255) not null, End_time varchar(255) null, Duration varchar(255) not null, PRIMARY KEY(id))`;
     
     
     db.query(createTable, function(err, results, fields) {
@@ -47,7 +47,7 @@ const bookingTimeCheck = async (req, res) => {
 
     // Retrieve the group's current booking total
     const bookingTotal = await db.query(
-        `SELECT SUM (Duration) as total_duration FROM bookings WHERE Group = ${group}`
+        `SELECT SUM (Duration) as total_duration FROM bookings WHERE Grp = ${group}`
     );
     
     // Check if booking total has exceeded the limit for the week
@@ -57,7 +57,7 @@ const bookingTimeCheck = async (req, res) => {
     
     // Save the booking to the databse
     await db.query(
-        `INSERT INTO bookings (Group, Start_time, End_time, Duration) VALUES (${group}, ${startTime}, ${endTime}, ${duration})`
+        `INSERT INTO bookings (Grp, Start_time, End_time, Duration) VALUES (${group}, ${startTime}, ${endTime}, ${duration})`
     );
 
 
@@ -76,7 +76,7 @@ router.post("/register", (req, res) => {
 
     bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) throw err;
-    const sql = `INSERT INTO userdata (StudentName, Module, MatricNo, Group, Role, Username, Password) VALUES ("${name}", "${module}", "${matricno}", "${group}", "${role}", "${username}", "${password}")`;
+    const sql = `INSERT INTO userdata (StudentName, Module, MatricNo, Grp, Role, Username, Password) VALUES ("${name}", "${module}", "${matricno}", "${group}", "${role}", "${username}", "${password}")`;
 
     db.query(sql, (err, result) => {
       if (err) throw err;
@@ -121,7 +121,7 @@ app.use(cors({
 
 //fetch data from table and send to client 
 app.get("/calendar_data", (req, res) => {
-    const sql = `SELECT (id, Group, Start_time, End_time, Duration) FROM bookings`;
+    const sql = `SELECT (id, Grp, Start_time, End_time, Duration) FROM bookings`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       
@@ -133,7 +133,7 @@ app.get("/calendar_data", (req, res) => {
               event_id: row.id,
               start: row.Start_time,
               end: row.End_time,
-              grp_id: row.Group
+              grp_id: row.Grp
               
           };
           data.push(jsonRow);
