@@ -1,5 +1,12 @@
 const mysql = require('mysql');
 
+const db = mysql.createConnection({
+    host : 'localhost',
+    user : 'root',
+    password : 'root',
+    database: 'test'
+  });
+
 const sql = `DELETE FROM bookings`;
 
 db.query(sql, function(err, results, fields) {
