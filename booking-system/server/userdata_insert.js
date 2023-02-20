@@ -15,7 +15,7 @@ const userData = [
 
 const sql1 = `INSERT INTO userdata (StudentName, Module, MatricNo, Grp, Role, Username, Password) VALUES ?`;
 
-db.query(sql1, [userData], (err, results, fields) {
+db.query(sql1, [userData], (err, results, fields)) {
   if (err) {
     console.log(err.message);
   }
