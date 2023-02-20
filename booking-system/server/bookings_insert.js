@@ -1,5 +1,12 @@
 const mysql = require('mysql');
 
+const db = mysql.createConnection({
+    host : 'localhost',
+    user : 'root',
+    password : 'root',
+    database: 'test'
+  });
+
 const bookingData = [
   [2, "03/21/2023 02:00pm", "03/21/2023 03:00pm", 1],
   [3, "03/22/2023 02:00pm", "03/22/2023 04:00pm", 2]
