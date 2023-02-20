@@ -14,7 +14,7 @@ const bookingData = [
 
 let sql2 = `INSERT INTO bookings (Grp, Start_time, End_time, Duration) VALUES ?`;
 
-db.query(sql2, [bookingData], (err, results, fields)) {
+db.query(sql2, [bookingData], function(err, results, fields) {
   if (err) {
     console.log(err.message);
   }
