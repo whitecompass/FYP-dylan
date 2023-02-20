@@ -76,8 +76,9 @@ router.post("/register", (req, res) => {
 
     bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) throw err;
-    const sql = `INSERT INTO userdata (StudentName, Module, MatricNo, Grp, Role, Username, Password) VALUES ("${name}", "${module}", "${matricno}", "${group}", "${role}", "${username}", "${password}")`;
-
+    //const sql = `INSERT INTO userdata (StudentName, Module, MatricNo, Grp, Role, Username, Password) VALUES ("${name}", "${module}", "${matricno}", "${group}", "${role}", "${username}", "${password}")`;
+    //changed sql statement to the bottom one to only insert into the table 2 values
+    const sql = `INSERT INTO userdata (Username, Password) VALUES ("${username}", "${password}")`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       res.send('User registered successfully');
@@ -121,7 +122,9 @@ app.use(cors({
 
 //fetch data from table and send to client 
 app.get("/calendar_data", (req, res) => {
-    const sql = `SELECT (id, Grp, Start_time, End_time, Duration) FROM bookings`;
+    //const sql = `SELECT (id, Grp, Start_time, End_time, Duration) FROM bookings`;
+    //error in syntax for the statement above, changed to the one below:
+    const sql = `SELECT * FROM bookings`;
     db.query(sql, (err, result) => {
       if (err) throw err;
       
